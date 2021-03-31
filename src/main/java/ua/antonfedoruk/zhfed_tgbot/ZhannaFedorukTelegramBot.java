@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-// This class describes our variant of TelegramWebhookBot bean, that we will declare in config files
+// This class describes our variant of TelegramWebhookBot bean, that we will declare in config files.
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ZhannaFedorukTelegramBot extends TelegramWebhookBot {
