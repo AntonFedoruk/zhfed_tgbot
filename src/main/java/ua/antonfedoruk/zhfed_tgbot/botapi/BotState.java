@@ -1,0 +1,15 @@
+package ua.antonfedoruk.zhfed_tgbot.botapi;
+
+public enum BotState {
+    WELCOME_NEW_CLIENT,
+    GREETING,
+    ABOUT_ME,
+    ABOUT_BOT,
+    WELCOME_NEW_CLIENT_COMPLETED,
+    ASK_CONSULTATION_COUNTRY,
+    ASK_CONSULTATION_PHONE,
+    ASK_CONSULTATION_MESSENGER,
+    FILLING_PROFILE,
+    PROFILE_FILLED,
+    SHOW_HELP_MENU;
+}
