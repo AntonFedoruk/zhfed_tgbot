@@ -22,7 +22,7 @@ public class UserDataCache implements DataCache {
     public BotState getUsersCurrentBotState(long userId) {
         BotState botState = usersBotState.get(userId);
         if (botState == null) {
-            botState = BotState.GREETING;
+            botState = BotState.WELCOME_NEW_CLIENT;
         }
         return botState;
     }
