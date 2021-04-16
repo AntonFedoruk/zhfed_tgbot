@@ -58,6 +58,7 @@ public class TelegramFacade {
                     update.getCallbackQuery().getFrom().getUserName(),
                     update.getCallbackQuery().getId(),
                     update.getCallbackQuery().getData());
+            log.info("bot state: {}", userDataCache.getUsersCurrentBotState(callbackQuery.getFrom().getId()));
             return handleCallbackQuery(callbackQuery);
         }
         return replyMessage;
@@ -71,19 +72,30 @@ public class TelegramFacade {
 //        BotApiMethod<?> callBackAnswer = mainMenuService.getMainMenuMessage(chatId, "Please use main menu"); //відповідь за замовчуванням яка міститеме повідомлення з пропозицією скористатися меню і саме меню
         BotApiMethod<?> callBackAnswer = null;
 
-        //From Continue choose buttons.
         //Set bot state according to chose button.
-        if (buttonQuery.getData().equals(messageService.getReplyText("continue"))) {
+
+        //From 'Continue' choose buttons.
+        if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue") + "\" has been pressed")) {
             botState = BotState.CONTINUE_BEFORE_ABOUT_SUCCESS;
-            SendMessage greeting = replyMessageService.getReplyMessage(chatId, "greeting");
-            SendMessage aboutMe = replyMessageService.getReplyMessage(chatId, "greeting.about_me");
+            SendMessage aboutSuccess = replyMessageService.getReplyMessage(chatId, "greeting.about_success");
+            SendMessage mySuccess = replyMessageService.getReplyMessage(chatId, "greeting.my_success");
             SendChatAction typing = new SendChatAction();
             typing.setAction(ActionType.TYPING);
             typing.setChatId(chatId.toString());
-            telegramBot.sendSeveralAnswers(4, greeting, typing, aboutMe, typing);
+            telegramBot.sendSeveralAnswers(4, aboutSuccess, typing, mySuccess, typing);
+        }
+        //From 'Yes' choose buttons.
+        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue_yes") + "\" has been pressed")) {
+            botState = BotState.CONTINUE_BEFORE_INTRODUCTION_VIDEO;
+        }
+        //From 'Watch' choose buttons.
+        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("video.watch") + "\" has been pressed")) {
+            botState = BotState.WATCH_INTRODUCTION_VIDEO;
         } else {// Take the bot state from the cache.
             botState = userDataCache.getUsersCurrentBotState(userId);
         }
+
+        log.info("handler bot state: {}", botState);
 
         userDataCache.setUsersCurrentBotState(userId, botState);
 
@@ -104,11 +116,10 @@ public class TelegramFacade {
                 botState = BotState.WELCOME_NEW_CLIENT;
                 SendMessage greeting = replyMessageService.getReplyMessage(chatId, "greeting");
                 SendMessage aboutMe = replyMessageService.getReplyMessage(chatId, "greeting.about_me");
-                SendMessage aboutBot = replyMessageService.getReplyMessage(chatId, "greeting.about_bot");
                 SendChatAction typing = new SendChatAction();
                 typing.setAction(ActionType.TYPING);
                 typing.setChatId(chatId.toString());
-                telegramBot.sendSeveralAnswers(5, greeting, typing, aboutMe, typing, aboutBot);
+                telegramBot.sendSeveralAnswers(5, greeting, typing, aboutMe, typing);
                 break;
             case "/consultation_appointment":
                 break;

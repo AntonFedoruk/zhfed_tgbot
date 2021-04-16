@@ -49,7 +49,7 @@ public class ZhannaFedorukTelegramBot extends TelegramWebhookBot {
     @SneakyThrows
     public void sendSeveralAnswers(long pauseBetweenAnswersInSeconds, BotApiMethod<?>...methods) {
         for ( BotApiMethod<?> method : methods) {
-            if (method.getMethod().equals("sendChatAction")) {
+            if (!method.getMethod().equals("sendChatAction")) {
                 Thread.sleep(pauseBetweenAnswersInSeconds*1000);
             }
             execute(method);
