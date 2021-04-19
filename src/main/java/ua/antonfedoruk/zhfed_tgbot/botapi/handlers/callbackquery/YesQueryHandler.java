@@ -28,7 +28,7 @@ public class YesQueryHandler implements CallbackQueryHandler {
 //        replyMessage.setParseMode(ParseMode.HTML);
         replyMessage.setReplyMarkup(buttonService.createButtonWithUrl(messageService.getReplyText("video.watch"), "https://www.youtube.com/watch?v=--6ydjM09Zk"));
 
-        userDataCache.setUsersCurrentBotState(buttonQuery.getFrom().getId(), BotState.WATCH_INTRODUCTION_VIDEO);
+        userDataCache.setUsersCurrentBotState(buttonQuery.getFrom().getId(), BotState.CONTINUE_AFTER_INTRODUCTION_VIDEO);
 
         return replyMessage;
     }

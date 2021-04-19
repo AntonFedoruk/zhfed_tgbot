@@ -70,28 +70,69 @@ public class TelegramFacade {
         BotState botState;
         //відповідь на запит
 //        BotApiMethod<?> callBackAnswer = mainMenuService.getMainMenuMessage(chatId, "Please use main menu"); //відповідь за замовчуванням яка міститеме повідомлення з пропозицією скористатися меню і саме меню
-        BotApiMethod<?> callBackAnswer = null;
+//        BotApiMethod<?> callBackAnswer = null;
 
         //Set bot state according to chose button.
 
         //From 'Continue' choose buttons.
         if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue") + "\" has been pressed")) {
             botState = BotState.CONTINUE_BEFORE_ABOUT_SUCCESS;
+
             SendMessage aboutSuccess = replyMessageService.getReplyMessage(chatId, "greeting.about_success");
             SendMessage mySuccess = replyMessageService.getReplyMessage(chatId, "greeting.my_success");
+
             SendChatAction typing = new SendChatAction();
             typing.setAction(ActionType.TYPING);
             typing.setChatId(chatId.toString());
+
             telegramBot.sendSeveralAnswers(4, aboutSuccess, typing, mySuccess, typing);
         }
+
         //From 'Yes' choose buttons.
-        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue_yes") + "\" has been pressed")) {
+        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue_yes") + "\" has been pressed")
+                && userDataCache.getUsersCurrentBotState(userId).equals(BotState.WELCOME_NEW_CLIENT)) {
             botState = BotState.CONTINUE_BEFORE_INTRODUCTION_VIDEO;
+
+            BotApiMethod<?> sendButtonWithVideo = botStateContext.handleCallbackQuery(botState, buttonQuery);
+
+            SendChatAction typing = new SendChatAction();
+            typing.setAction(ActionType.TYPING);
+            typing.setChatId(chatId.toString());
+
+            telegramBot.sendSeveralAnswers(5, sendButtonWithVideo, typing);
+
+            //at this position user may press 'button to watch video'
+
+            botState = BotState.CONTINUE_AFTER_INTRODUCTION_VIDEO;
         }
-        //From 'Watch' choose buttons.
-        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("video.watch") + "\" has been pressed")) {
-            botState = BotState.WATCH_INTRODUCTION_VIDEO;
-        } else {// Take the bot state from the cache.
+
+        //From 'Continue' button after video-button.
+        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue") + "\" has been pressed")
+                && userDataCache.getUsersCurrentBotState(userId).equals(BotState.CONTINUE_BEFORE_INTRODUCTION_VIDEO)) {
+
+            BotApiMethod<?> needsForSuccess = messageService.getReplyMessage(chatId, "greeting.steps_for_success");
+
+            BotApiMethod<?> necessaryQualities = messageService.getReplyMessage(chatId, "greeting.dont_worry");
+
+            SendChatAction typing = new SendChatAction();
+            typing.setAction(ActionType.TYPING);
+            typing.setChatId(chatId.toString());
+
+            telegramBot.sendSeveralAnswers(3, typing, needsForSuccess);
+
+            telegramBot.sendSeveralAnswers(5, typing, necessaryQualities, typing);
+
+            botState = BotState.VIDEOS_CONCLUSION;
+        }
+
+// something wrong with this callback
+//
+//        //From 'Watch' choose buttons.
+//        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("video.watch") + "\" has been pressed")) {
+//            botState = BotState.CONTINUE_AFTER_INTRODUCTION_VIDEO;
+//        }
+
+        else {// Take the bot state from the cache.
             botState = userDataCache.getUsersCurrentBotState(userId);
         }
 

@@ -24,16 +24,34 @@ public class ContinueQueryHandler implements CallbackQueryHandler {
 
     @Override
     public SendMessage handle(CallbackQuery buttonQuery) {
-        SendMessage replyMessage = messageService.getReplyMessage(buttonQuery.getFrom().getId(),"greeting.are_you_ready");
-        replyMessage.setReplyMarkup(buttonService.createButton(messageService.getReplyText("continue_yes")));
+        SendMessage replyMessage = null;
+        BotState botState = null;
 
-        userDataCache.setUsersCurrentBotState(buttonQuery.getFrom().getId(), BotState.CONTINUE_BEFORE_INTRODUCTION_VIDEO);
+        if(userDataCache.getUsersCurrentBotState(buttonQuery.getFrom().getId()).equals(BotState.CONTINUE_BEFORE_ABOUT_SUCCESS)) {
+            replyMessage = messageService.getReplyMessage(buttonQuery.getFrom().getId(), "greeting.are_you_ready");
+            replyMessage.setReplyMarkup(buttonService.createButton(messageService.getReplyText("continue_yes")));
+            botState = BotState.CONTINUE_BEFORE_INTRODUCTION_VIDEO;
+        }
+
+        if(userDataCache.getUsersCurrentBotState(buttonQuery.getFrom().getId()).equals(BotState.CONTINUE_AFTER_INTRODUCTION_VIDEO)) {
+            replyMessage = messageService.getReplyMessage(buttonQuery.getFrom().getId(), "greeting.after_video");
+            replyMessage.setReplyMarkup(buttonService.createButton(messageService.getReplyText("continue")));
+            botState = BotState.VIDEOS_CONCLUSION;
+        }
+
+        if (userDataCache.getUsersCurrentBotState(buttonQuery.getFrom().getId()).equals(BotState.VIDEOS_CONCLUSION)) {
+            replyMessage = messageService.getReplyMessage(buttonQuery.getFrom().getId(), "");
+            replyMessage.setReplyMarkup(buttonService.createButton(messageService.getReplyText("")));
+            botState = BotState.CONSULTATION_AS_PRESENT;
+        }
+
+        userDataCache.setUsersCurrentBotState(buttonQuery.getFrom().getId(), botState);
 
         return replyMessage;
     }
 
     @Override
     public BotState getHandlersBotState() {
-        return BotState.CONTINUE_BEFORE_ABOUT_SUCCESS;
+        return BotState.CONTINUE_BUTTONS;
     }
 }

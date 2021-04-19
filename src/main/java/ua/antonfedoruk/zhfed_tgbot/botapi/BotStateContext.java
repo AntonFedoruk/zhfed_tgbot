@@ -34,6 +34,9 @@ public class BotStateContext {
     }
 
     private CallbackQueryHandler findCallbackQueryHandler(BotState currentState) {
+        if (isContinueButtonDisplayed(currentState)) {
+            return callbackQueryHandlers.get(BotState.CONTINUE_BUTTONS);
+        }
         return callbackQueryHandlers.get(currentState);
     }
 
@@ -49,6 +52,17 @@ public class BotStateContext {
             case ASK_CONSULTATION_COUNTRY:
             case ASK_CONSULTATION_PHONE:
             case ASK_CONSULTATION_MESSENGER:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private boolean isContinueButtonDisplayed(BotState currentState) {
+        switch (currentState) {
+            case CONTINUE_BUTTONS:
+            case CONTINUE_BEFORE_ABOUT_SUCCESS:
+            case CONTINUE_AFTER_INTRODUCTION_VIDEO:
                 return true;
             default:
                 return false;
