@@ -40,8 +40,8 @@ public class ContinueQueryHandler implements CallbackQueryHandler {
         }
 
         if (userDataCache.getUsersCurrentBotState(buttonQuery.getFrom().getId()).equals(BotState.VIDEOS_CONCLUSION)) {
-            replyMessage = messageService.getReplyMessage(buttonQuery.getFrom().getId(), "");
-            replyMessage.setReplyMarkup(buttonService.createButton(messageService.getReplyText("")));
+            replyMessage = messageService.getReplyMessage(buttonQuery.getFrom().getId(), "consultation.present_from_me");
+            replyMessage.setReplyMarkup(buttonService.createButton(messageService.getReplyText("consultation.get_button_text")));
             botState = BotState.CONSULTATION_AS_PRESENT;
         }
 

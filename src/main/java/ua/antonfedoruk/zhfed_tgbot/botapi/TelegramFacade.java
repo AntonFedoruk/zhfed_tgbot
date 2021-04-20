@@ -75,7 +75,8 @@ public class TelegramFacade {
         //Set bot state according to chose button.
 
         //From 'Continue' choose buttons.
-        if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue") + "\" has been pressed")) {
+        if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue") + "\" has been pressed")
+                && userDataCache.getUsersCurrentBotState(userId).equals(BotState.CONTINUE_BEFORE_ABOUT_SUCCESS)) {
             botState = BotState.CONTINUE_BEFORE_ABOUT_SUCCESS;
 
             SendMessage aboutSuccess = replyMessageService.getReplyMessage(chatId, "greeting.about_success");
@@ -89,8 +90,7 @@ public class TelegramFacade {
         }
 
         //From 'Yes' choose buttons.
-        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue_yes") + "\" has been pressed")
-                && userDataCache.getUsersCurrentBotState(userId).equals(BotState.WELCOME_NEW_CLIENT)) {
+        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue_yes") + "\" has been pressed")) {
             botState = BotState.CONTINUE_BEFORE_INTRODUCTION_VIDEO;
 
             BotApiMethod<?> sendButtonWithVideo = botStateContext.handleCallbackQuery(botState, buttonQuery);
@@ -108,7 +108,7 @@ public class TelegramFacade {
 
         //From 'Continue' button after video-button.
         else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue") + "\" has been pressed")
-                && userDataCache.getUsersCurrentBotState(userId).equals(BotState.CONTINUE_BEFORE_INTRODUCTION_VIDEO)) {
+                && userDataCache.getUsersCurrentBotState(userId).equals(BotState.VIDEOS_CONCLUSION)) {
 
             BotApiMethod<?> needsForSuccess = messageService.getReplyMessage(chatId, "greeting.steps_for_success");
 
