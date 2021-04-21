@@ -125,18 +125,38 @@ public class TelegramFacade {
             botState = BotState.VIDEOS_CONCLUSION;
         }
 
-// something wrong with this callback
+// something wrong with this callback(can't see callback from button with link inside)
 //
 //        //From 'Watch' choose buttons.
 //        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("video.watch") + "\" has been pressed")) {
 //            botState = BotState.CONTINUE_AFTER_INTRODUCTION_VIDEO;
 //        }
 
+        //From 'Get' consultation button.
+        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("consultation.get_button_text") + "\" has been pressed")) {
+
+            BotApiMethod<?> intro = messageService.getReplyMessage(chatId, "consultation.intro");
+            BotApiMethod<?> youWillGet = messageService.getReplyMessage(chatId, "consultation.you_will_get");
+            BotApiMethod<?> youWillGet1 = messageService.getReplyMessage(chatId, "consultation.you_will_get_1");
+            BotApiMethod<?> youWillGet2 = messageService.getReplyMessage(chatId, "consultation.you_will_get_2");
+            BotApiMethod<?> youWillGet3 = messageService.getReplyMessage(chatId, "consultation.you_will_get_3");
+            BotApiMethod<?> youWillGet4 = messageService.getReplyMessage(chatId, "consultation.you_will_get_4");
+
+            SendChatAction typing = new SendChatAction();
+            typing.setAction(ActionType.TYPING);
+            typing.setChatId(chatId.toString());
+
+            telegramBot.sendSeveralAnswers(3, typing, intro, typing, youWillGet, typing, youWillGet1,
+                    typing, youWillGet2, typing, youWillGet3, typing, youWillGet4, typing);
+
+            botState = BotState.ABOUT_CONSULTATION;
+        }
+
         else {// Take the bot state from the cache.
             botState = userDataCache.getUsersCurrentBotState(userId);
         }
 
-        log.info("handler bot state: {}", botState);
+        log.info("go to handler with key: {}", botState);
 
         userDataCache.setUsersCurrentBotState(userId, botState);
 
@@ -148,7 +168,7 @@ public class TelegramFacade {
         String inputMessage = message.getText();
         Long userId = message.getFrom().getId();
         Long chatId = message.getChatId();
-        BotState botState = null;
+        BotState botState;
         SendMessage replyMessage;
 
         // Set bot state according to entered message.
@@ -163,6 +183,7 @@ public class TelegramFacade {
                 telegramBot.sendSeveralAnswers(5, greeting, typing, aboutMe, typing);
                 break;
             case "/consultation_appointment":
+                botState = BotState.ABOUT_CONSULTATION;
                 break;
             case "/help":
                 botState = BotState.SHOW_HELP_MENU;

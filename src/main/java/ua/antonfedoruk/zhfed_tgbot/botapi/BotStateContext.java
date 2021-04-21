@@ -63,6 +63,7 @@ public class BotStateContext {
             case CONTINUE_BUTTONS:
             case CONTINUE_BEFORE_ABOUT_SUCCESS:
             case CONTINUE_AFTER_INTRODUCTION_VIDEO:
+            case VIDEOS_CONCLUSION:
                 return true;
             default:
                 return false;
