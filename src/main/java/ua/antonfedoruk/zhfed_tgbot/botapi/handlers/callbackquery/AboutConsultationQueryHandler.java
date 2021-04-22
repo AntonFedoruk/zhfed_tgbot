@@ -9,12 +9,12 @@ import ua.antonfedoruk.zhfed_tgbot.service.CreateButtonService;
 import ua.antonfedoruk.zhfed_tgbot.service.ReplyMessageService;
 
 @Component
-public class ConsultationQueryHandler implements CallbackQueryHandler {
+public class AboutConsultationQueryHandler implements CallbackQueryHandler {
     private ReplyMessageService replyMessageService;
     private UserDataCache userDataCache;
     private CreateButtonService buttonService;
 
-    public ConsultationQueryHandler(ReplyMessageService replyMessageService, UserDataCache userDataCache, CreateButtonService buttonService) {
+    public AboutConsultationQueryHandler(ReplyMessageService replyMessageService, UserDataCache userDataCache, CreateButtonService buttonService) {
         this.replyMessageService = replyMessageService;
         this.userDataCache = userDataCache;
         this.buttonService = buttonService;
@@ -23,12 +23,8 @@ public class ConsultationQueryHandler implements CallbackQueryHandler {
     @Override
     public SendMessage handle(CallbackQuery buttonQuery) {
         SendMessage replyMessage = replyMessageService.getReplyMessage(buttonQuery.getFrom().getId(), "consultation.registration_instructions");
-//        replyMessage.setReplyMarkup(buttonService.createButton("button"));
-//        replyMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("consultation.registration_button")));
         replyMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("consultation.registration_button")));
-        userDataCache.setUsersCurrentBotState(buttonQuery.getFrom().getId(), BotState.ASK_CONSULTATION_MESSENGER);
-
-        System.out.println("from consultation query handler");
+        userDataCache.setUsersCurrentBotState(buttonQuery.getFrom().getId(), BotState.CONSULTATION_REQUEST);
 
         return replyMessage;
     }
