@@ -146,7 +146,7 @@ public class TelegramFacade {
             typing.setAction(ActionType.TYPING);
             typing.setChatId(chatId.toString());
 
-            telegramBot.sendSeveralAnswers(3, typing, intro, typing, youWillGet, typing, youWillGet1,
+            telegramBot.sendSeveralAnswers(2, typing, intro, typing, youWillGet, typing, youWillGet1,
                     typing, youWillGet2, typing, youWillGet3, typing, youWillGet4, typing);
 
             botState = BotState.ABOUT_CONSULTATION;

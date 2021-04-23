@@ -41,13 +41,13 @@ public class BotStateContext {
     }
 
     private InputMessageHandler findMessageHandler(BotState currentState) {
-        if (isAskForConsultation(currentState)) {
+        if (isRegistrationOnConsultation(currentState)) {
             return messageHandlers.get(BotState.FILLING_CONSULTATION_DATA);
         }
         return messageHandlers.get(currentState);
     }
 
-    private boolean isAskForConsultation(BotState currentState) {
+    private boolean isRegistrationOnConsultation(BotState currentState) {
         switch (currentState) {
             case ASK_CONSULTATION_COUNTRY:
             case ASK_CONSULTATION_PHONE:
