@@ -83,6 +83,8 @@ public class TelegramFacade {
                 && userDataCache.getUsersCurrentBotState(userId).equals(BotState.CONTINUE_BEFORE_ABOUT_SUCCESS)) {
             botState = BotState.CONTINUE_BEFORE_ABOUT_SUCCESS;
 
+            telegramBot.sendPhoto(chatId, null, "static/images/contracts-and-agreements.jpg");
+
             SendMessage aboutSuccess = replyMessageService.getReplyMessage(chatId, "greeting.about_success");
             SendMessage mySuccess = replyMessageService.getReplyMessage(chatId, "greeting.my_success");
 
