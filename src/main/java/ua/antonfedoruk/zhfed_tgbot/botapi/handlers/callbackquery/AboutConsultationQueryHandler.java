@@ -7,6 +7,7 @@ import ua.antonfedoruk.zhfed_tgbot.botapi.BotState;
 import ua.antonfedoruk.zhfed_tgbot.cache.UserDataCache;
 import ua.antonfedoruk.zhfed_tgbot.service.CreateButtonService;
 import ua.antonfedoruk.zhfed_tgbot.service.ReplyMessageService;
+import ua.antonfedoruk.zhfed_tgbot.utils.Emoji;
 
 @Component
 public class AboutConsultationQueryHandler implements CallbackQueryHandler {
@@ -22,8 +23,8 @@ public class AboutConsultationQueryHandler implements CallbackQueryHandler {
 
     @Override
     public SendMessage handle(CallbackQuery buttonQuery) {
-        SendMessage replyMessage = replyMessageService.getReplyMessage(buttonQuery.getFrom().getId(), "consultation.registration_instructions");
-        replyMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("consultation.registration_button")));
+        SendMessage replyMessage = replyMessageService.getReplyMessage(buttonQuery.getFrom().getId(), "consultation.registration_instructions", Emoji.WOMAN_TEACHER, Emoji.SLIGHTLY_SMILING_FACE);
+        replyMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("consultation.registration_button", Emoji.SEND_LETTER)));
         userDataCache.setUsersCurrentBotState(buttonQuery.getFrom().getId(), BotState.CONSULTATION_REQUEST);
 
         return replyMessage;

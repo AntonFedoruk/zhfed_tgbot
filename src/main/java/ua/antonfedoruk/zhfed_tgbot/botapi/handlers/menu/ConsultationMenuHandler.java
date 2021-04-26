@@ -8,6 +8,7 @@ import ua.antonfedoruk.zhfed_tgbot.botapi.handlers.InputMessageHandler;
 import ua.antonfedoruk.zhfed_tgbot.cache.UserDataCache;
 import ua.antonfedoruk.zhfed_tgbot.service.CreateButtonService;
 import ua.antonfedoruk.zhfed_tgbot.service.ReplyMessageService;
+import ua.antonfedoruk.zhfed_tgbot.utils.Emoji;
 
 @Component
 public class ConsultationMenuHandler implements InputMessageHandler {
@@ -23,8 +24,8 @@ public class ConsultationMenuHandler implements InputMessageHandler {
 
     @Override
     public SendMessage handle(Message message) {
-        SendMessage replyMessage = replyMessageService.getReplyMessage(message.getFrom().getId(), "consultation.registration_instructions");
-        replyMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("consultation.registration_button")));
+        SendMessage replyMessage = replyMessageService.getReplyMessage(message.getFrom().getId(), "consultation.registration_instructions", Emoji.WOMAN_TEACHER, Emoji.SLIGHTLY_SMILING_FACE);
+        replyMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("consultation.registration_button", Emoji.SEND_LETTER)));
         userDataCache.setUsersCurrentBotState(message.getFrom().getId(), BotState.CONSULTATION_REQUEST);
         return replyMessage;
     }

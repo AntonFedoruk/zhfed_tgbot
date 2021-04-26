@@ -28,6 +28,9 @@ dependencies {
     // telegram API library
     compile group: 'org.telegram', name: 'telegrambots-spring-boot-starter', version: '5.1.1'
 
+    // this library transfer emoji -> into unicode objects
+    implementation group: 'com.vdurmont', name: 'emoji-java', version: '5.1.1'
+
 }
 
 test {

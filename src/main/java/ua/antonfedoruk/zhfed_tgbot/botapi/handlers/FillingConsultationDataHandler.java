@@ -8,6 +8,7 @@ import ua.antonfedoruk.zhfed_tgbot.cache.UserDataCache;
 import ua.antonfedoruk.zhfed_tgbot.model.UserProfileData;
 import ua.antonfedoruk.zhfed_tgbot.service.CreateButtonService;
 import ua.antonfedoruk.zhfed_tgbot.service.ReplyMessageService;
+import ua.antonfedoruk.zhfed_tgbot.utils.Emoji;
 
 @Component
 public class FillingConsultationDataHandler implements InputMessageHandler {
@@ -33,8 +34,8 @@ public class FillingConsultationDataHandler implements InputMessageHandler {
         SendMessage replyMessage = null;
 
         if (botState.equals(BotState.ABOUT_CONSULTATION)) {
-            replyMessage = replyMessageService.getReplyMessage(chatId, "consultation.registration_instructions");
-            replyMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("consultation.registration_button")));
+            replyMessage = replyMessageService.getReplyMessage(chatId, "consultation.registration_instructions", Emoji.WOMAN_TEACHER, Emoji.SLIGHTLY_SMILING_FACE);
+            replyMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("consultation.registration_button", Emoji.SEND_LETTER)));
             userDataCache.setUsersCurrentBotState(userId, BotState.CONSULTATION_REQUEST);
         }
 
@@ -48,7 +49,7 @@ public class FillingConsultationDataHandler implements InputMessageHandler {
             profileData.setCountry(usersAnswer);
 
             //final answer
-            String successRegistrationMessage = replyMessageService.getReplyText("consultation.registration_success");
+            String successRegistrationMessage = replyMessageService.getReplyText("consultation.registration_success", Emoji.INBOX_TRAY);
             replyMessage = new SendMessage(chatId.toString(), String.format("%s%n(%s, %s, %s)",successRegistrationMessage, profileData.getMessenger(),
                     profileData.getPhoneNumber(), profileData.getCountry()));
 

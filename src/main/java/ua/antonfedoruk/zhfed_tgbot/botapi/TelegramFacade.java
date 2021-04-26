@@ -17,6 +17,7 @@ import ua.antonfedoruk.zhfed_tgbot.ZhannaFedorukTelegramBot;
 import ua.antonfedoruk.zhfed_tgbot.cache.UserDataCache;
 import ua.antonfedoruk.zhfed_tgbot.service.MainMenuService;
 import ua.antonfedoruk.zhfed_tgbot.service.ReplyMessageService;
+import ua.antonfedoruk.zhfed_tgbot.utils.Emoji;
 
 // This class processes the Update and prepares a response to it.
 @Component
@@ -57,9 +58,9 @@ public class TelegramFacade {
         //Handling  pressed buttons.
         if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
-            log.info("An inline button pressed byUser:{}, userId:{}, with data:{}",
+            log.info("An inline button pressed byUser:{}, chatId:{}, with data:{}",
                     update.getCallbackQuery().getFrom().getUserName(),
-                    update.getCallbackQuery().getId(),
+                    update.getCallbackQuery().getMessage().getChatId(),
                     update.getCallbackQuery().getData());
             log.info("bot state: {}", userDataCache.getUsersCurrentBotState(callbackQuery.getFrom().getId()));
             return handleCallbackQuery(callbackQuery);
@@ -85,8 +86,8 @@ public class TelegramFacade {
 
             telegramBot.sendPhoto(chatId, null, "static/images/contracts-and-agreements.jpg");
 
-            SendMessage aboutSuccess = replyMessageService.getReplyMessage(chatId, "greeting.about_success");
-            SendMessage mySuccess = replyMessageService.getReplyMessage(chatId, "greeting.my_success");
+            SendMessage aboutSuccess = replyMessageService.getReplyMessage(chatId, "greeting.about_success", Emoji.PEN);
+            SendMessage mySuccess = replyMessageService.getReplyMessage(chatId, "greeting.my_success", Emoji.SLIGHTLY_SMILING_FACE);
 
             SendChatAction typing = new SendChatAction();
             typing.setAction(ActionType.TYPING);
@@ -115,9 +116,9 @@ public class TelegramFacade {
         //From 'Continue' button after video-button.
         else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue") + "\" has been pressed")
                 && userDataCache.getUsersCurrentBotState(userId).equals(BotState.VIDEOS_CONCLUSION)) {
-            BotApiMethod<?> needsForSuccess = messageService.getReplyMessage(chatId, "greeting.steps_for_success");
+            BotApiMethod<?> needsForSuccess = messageService.getReplyMessage(chatId, "greeting.steps_for_success", Emoji.NOTES, Emoji.DOT);
 
-            BotApiMethod<?> necessaryQualities = messageService.getReplyMessage(chatId, "greeting.dont_worry");
+            BotApiMethod<?> necessaryQualities = messageService.getReplyMessage(chatId, "greeting.dont_worry", Emoji.BLUSH);
 
             SendChatAction typing = new SendChatAction();
             typing.setAction(ActionType.TYPING);
@@ -140,7 +141,7 @@ public class TelegramFacade {
         //From 'Get' consultation button.
         else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("consultation.get_button_text") + "\" has been pressed")) {
             BotApiMethod<?> intro = messageService.getReplyMessage(chatId, "consultation.intro");
-            BotApiMethod<?> youWillGet = messageService.getReplyMessage(chatId, "consultation.you_will_get");
+            BotApiMethod<?> youWillGet = messageService.getReplyMessage(chatId, "consultation.you_will_get", Emoji.BOOK);
             BotApiMethod<?> youWillGet1 = messageService.getReplyMessage(chatId, "consultation.you_will_get_1");
             BotApiMethod<?> youWillGet2 = messageService.getReplyMessage(chatId, "consultation.you_will_get_2");
             BotApiMethod<?> youWillGet3 = messageService.getReplyMessage(chatId, "consultation.you_will_get_3");
@@ -184,7 +185,7 @@ public class TelegramFacade {
             case "Знакомство с ботом":
                 botState = BotState.WELCOME_NEW_CLIENT;
                 SendMessage greeting = replyMessageService.getReplyMessage(chatId, "greeting");
-                SendMessage aboutMe = replyMessageService.getReplyMessage(chatId, "greeting.about_me");
+                SendMessage aboutMe = replyMessageService.getReplyMessage(chatId, "greeting.about_me", Emoji.MONEY);
                 SendChatAction typing = new SendChatAction();
                 typing.setAction(ActionType.TYPING);
                 typing.setChatId(chatId.toString());

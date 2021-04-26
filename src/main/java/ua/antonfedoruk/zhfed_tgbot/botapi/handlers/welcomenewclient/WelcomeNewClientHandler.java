@@ -9,6 +9,7 @@ import ua.antonfedoruk.zhfed_tgbot.botapi.handlers.InputMessageHandler;
 import ua.antonfedoruk.zhfed_tgbot.cache.UserDataCache;
 import ua.antonfedoruk.zhfed_tgbot.service.CreateButtonService;
 import ua.antonfedoruk.zhfed_tgbot.service.ReplyMessageService;
+import ua.antonfedoruk.zhfed_tgbot.utils.Emoji;
 
 /**
  * Intro 'about bot'
@@ -42,9 +43,9 @@ public class WelcomeNewClientHandler implements InputMessageHandler {
         Long chatId = inputMessage.getChatId();
         BotState botState = BotState.CONTINUE_BEFORE_ABOUT_SUCCESS;
 
-        SendMessage replyToUser = messageService.getReplyMessage(chatId, "greeting.about_bot");
+        SendMessage replyToUser = messageService.getReplyMessage(chatId, "greeting.about_bot", Emoji.PC, Emoji.CALLING);
         //Add button "Continue".
-        String buttonText = messageService.getReplyText("continue");
+        String buttonText = messageService.getReplyText("continue", Emoji.ARROW_DOWN);
         InlineKeyboardMarkup keyboardMarkup = buttonService.createButton(buttonText);
         replyToUser.setReplyMarkup(keyboardMarkup);
 
