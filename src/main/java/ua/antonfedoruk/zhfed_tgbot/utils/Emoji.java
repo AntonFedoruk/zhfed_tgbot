@@ -10,7 +10,7 @@ public enum Emoji {
     CALLING(EmojiParser.parseToUnicode(":calling:")),
     ARROW_DOWN(EmojiParser.parseToUnicode(":arrow_down:")),
     PEN(EmojiParser.parseToUnicode(":lower_left_fountain_pen:")),
-    SLIGHTLY_SMILING_FACE(EmojiParser.parseToUnicode(":slightly_smiling_face:")),
+    WINK(EmojiParser.parseToUnicode(":wink:")),
     POINT_DOWN(EmojiParser.parseToUnicode(":point_down:")),
     CLAP(EmojiParser.parseToUnicode(":clap:")),
     LIKE(EmojiParser.parseToUnicode(":thumbsup:")),

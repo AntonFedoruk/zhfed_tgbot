@@ -23,7 +23,7 @@ public class AboutConsultationQueryHandler implements CallbackQueryHandler {
 
     @Override
     public SendMessage handle(CallbackQuery buttonQuery) {
-        SendMessage replyMessage = replyMessageService.getReplyMessage(buttonQuery.getFrom().getId(), "consultation.registration_instructions", Emoji.WOMAN_TEACHER, Emoji.SLIGHTLY_SMILING_FACE);
+        SendMessage replyMessage = replyMessageService.getReplyMessage(buttonQuery.getFrom().getId(), "consultation.registration_instructions", Emoji.WOMAN_TEACHER, Emoji.WINK);
         replyMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("consultation.registration_button", Emoji.SEND_LETTER)));
         userDataCache.setUsersCurrentBotState(buttonQuery.getFrom().getId(), BotState.CONSULTATION_REQUEST);
 

@@ -15,7 +15,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ua.antonfedoruk.zhfed_tgbot.ZhannaFedorukTelegramBot;
 import ua.antonfedoruk.zhfed_tgbot.cache.UserDataCache;
-import ua.antonfedoruk.zhfed_tgbot.service.MainMenuService;
 import ua.antonfedoruk.zhfed_tgbot.service.ReplyMessageService;
 import ua.antonfedoruk.zhfed_tgbot.utils.Emoji;
 
@@ -29,17 +28,15 @@ public class TelegramFacade {
     private final UserDataCache userDataCache;
     private BotStateContext botStateContext;
     private ReplyMessageService messageService;
-    private MainMenuService mainMenuService;
 
     // we have a loop in the initialization of the beans, so with @Lazy annotation we will delay the initialization of the bean ZhannaFedorukTelegramBot until now
     public TelegramFacade(@Lazy ZhannaFedorukTelegramBot telegramBot, ReplyMessageService replyMessageService,
-                          UserDataCache userDataCache, BotStateContext botStateContext, ReplyMessageService messageService, MainMenuService mainMenuService) {
+                          UserDataCache userDataCache, BotStateContext botStateContext, ReplyMessageService messageService) {
         this.telegramBot = telegramBot;
         this.replyMessageService = replyMessageService;
         this.userDataCache = userDataCache;
         this.botStateContext = botStateContext;
         this.messageService = messageService;
-        this.mainMenuService = mainMenuService;
     }
 
     //Determines whether there are messages/pressed buttons ... in this Update.
@@ -87,7 +84,7 @@ public class TelegramFacade {
             telegramBot.sendPhoto(chatId, null, "static/images/contracts-and-agreements.jpg");
 
             SendMessage aboutSuccess = replyMessageService.getReplyMessage(chatId, "greeting.about_success", Emoji.PEN);
-            SendMessage mySuccess = replyMessageService.getReplyMessage(chatId, "greeting.my_success", Emoji.SLIGHTLY_SMILING_FACE);
+            SendMessage mySuccess = replyMessageService.getReplyMessage(chatId, "greeting.my_success", Emoji.WINK);
 
             SendChatAction typing = new SendChatAction();
             typing.setAction(ActionType.TYPING);

@@ -24,7 +24,7 @@ public class ConsultationMenuHandler implements InputMessageHandler {
 
     @Override
     public SendMessage handle(Message message) {
-        SendMessage replyMessage = replyMessageService.getReplyMessage(message.getFrom().getId(), "consultation.registration_instructions", Emoji.WOMAN_TEACHER, Emoji.SLIGHTLY_SMILING_FACE);
+        SendMessage replyMessage = replyMessageService.getReplyMessage(message.getFrom().getId(), "consultation.registration_instructions", Emoji.WOMAN_TEACHER, Emoji.WINK);
         replyMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("consultation.registration_button", Emoji.SEND_LETTER)));
         userDataCache.setUsersCurrentBotState(message.getFrom().getId(), BotState.CONSULTATION_REQUEST);
         return replyMessage;

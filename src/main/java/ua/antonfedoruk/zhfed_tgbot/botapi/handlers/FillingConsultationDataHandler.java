@@ -34,7 +34,7 @@ public class FillingConsultationDataHandler implements InputMessageHandler {
         SendMessage replyMessage = null;
 
         if (botState.equals(BotState.ABOUT_CONSULTATION)) {
-            replyMessage = replyMessageService.getReplyMessage(chatId, "consultation.registration_instructions", Emoji.WOMAN_TEACHER, Emoji.SLIGHTLY_SMILING_FACE);
+            replyMessage = replyMessageService.getReplyMessage(chatId, "consultation.registration_instructions", Emoji.WOMAN_TEACHER, Emoji.WINK);
             replyMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("consultation.registration_button", Emoji.SEND_LETTER)));
             userDataCache.setUsersCurrentBotState(userId, BotState.CONSULTATION_REQUEST);
         }
