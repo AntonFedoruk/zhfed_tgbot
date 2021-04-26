@@ -24,4 +24,8 @@ public class ReplyMessageService {
     public String getReplyText(String replyText) {
         return localeMessageService.getMessage(replyText);
     }
+
+    public SendMessage getWIPMessage(long chatId) {
+        return new SendMessage(Long.toString(chatId), localeMessageService.getMessage("wip"));
+    }
 }

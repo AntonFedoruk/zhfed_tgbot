@@ -44,7 +44,8 @@ public class BotStateContext {
         if (isRegistrationOnConsultation(currentState)) {
             return messageHandlers.get(BotState.FILLING_CONSULTATION_DATA);
         }
-        return messageHandlers.get(currentState);
+        return messageHandlers.containsKey(currentState) ? messageHandlers.get(currentState) : messageHandlers.get(BotState.SHOW_MAIN_MENU);
+//        return messageHandlers.get(currentState);
     }
 
     private boolean isRegistrationOnConsultation(BotState currentState) {

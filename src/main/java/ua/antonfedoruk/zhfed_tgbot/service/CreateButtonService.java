@@ -9,7 +9,6 @@ import java.util.List;
 
 @Service
 public class CreateButtonService {
-
     public InlineKeyboardMarkup createButton(String buttonText) {
         //Создаем обьект разметки клавиатуры:
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
@@ -27,7 +26,7 @@ public class CreateButtonService {
         keyboardButtonsRow.add(button);
 
         //После этого нам нужно 'обьеденить ряды'(если у нас их несколько), поэтому создаем список рядов.
-        List<List<InlineKeyboardButton>> rowList= new ArrayList<>();
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow);
 
         //Теперь мы можем установить кнопку в обьект разметки клавиатуры.
@@ -53,7 +52,7 @@ public class CreateButtonService {
         keyboardButtonsRow.add(button);
 
         //После этого нам нужно 'обьеденить ряды'(если у нас их несколько), поэтому создаем список рядов.
-        List<List<InlineKeyboardButton>> rowList= new ArrayList<>();
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow);
 
         //Теперь мы можем установить кнопку в обьект разметки клавиатуры.
@@ -61,7 +60,7 @@ public class CreateButtonService {
         return inlineKeyboardMarkup;
     }
 
-    public InlineKeyboardMarkup createButtons4ps2x2(String buttonText11,String buttonText12,String buttonText21,String buttonText22) {
+    public InlineKeyboardMarkup createButtons4ps2x2(String buttonText11, String buttonText12, String buttonText21, String buttonText22) {
         //Создаем обьект разметки клавиатуры:
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
@@ -95,7 +94,7 @@ public class CreateButtonService {
         keyboardButtonsRow2.add(button22);
 
         //После этого нам нужно 'обьеденить ряды'(если у нас их несколько), поэтому создаем список рядов.
-        List<List<InlineKeyboardButton>> rowList= new ArrayList<>();
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow1);
         rowList.add(keyboardButtonsRow2);
 

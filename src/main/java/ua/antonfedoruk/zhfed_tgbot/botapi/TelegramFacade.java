@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ua.antonfedoruk.zhfed_tgbot.ZhannaFedorukTelegramBot;
 import ua.antonfedoruk.zhfed_tgbot.cache.UserDataCache;
+import ua.antonfedoruk.zhfed_tgbot.service.MainMenuService;
 import ua.antonfedoruk.zhfed_tgbot.service.ReplyMessageService;
 
 // This class processes the Update and prepares a response to it.
@@ -22,20 +23,22 @@ import ua.antonfedoruk.zhfed_tgbot.service.ReplyMessageService;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TelegramFacade {
-    ZhannaFedorukTelegramBot telegramBot;
-    ReplyMessageService replyMessageService;
+    private ZhannaFedorukTelegramBot telegramBot;
+    private ReplyMessageService replyMessageService;
     private final UserDataCache userDataCache;
     private BotStateContext botStateContext;
     private ReplyMessageService messageService;
+    private MainMenuService mainMenuService;
 
     // we have a loop in the initialization of the beans, so with @Lazy annotation we will delay the initialization of the bean ZhannaFedorukTelegramBot until now
     public TelegramFacade(@Lazy ZhannaFedorukTelegramBot telegramBot, ReplyMessageService replyMessageService,
-                          UserDataCache userDataCache, BotStateContext botStateContext, ReplyMessageService messageService) {
+                          UserDataCache userDataCache, BotStateContext botStateContext, ReplyMessageService messageService, MainMenuService mainMenuService) {
         this.telegramBot = telegramBot;
         this.replyMessageService = replyMessageService;
         this.userDataCache = userDataCache;
         this.botStateContext = botStateContext;
         this.messageService = messageService;
+        this.mainMenuService = mainMenuService;
     }
 
     //Determines whether there are messages/pressed buttons ... in this Update.
@@ -68,10 +71,11 @@ public class TelegramFacade {
         final Long chatId = buttonQuery.getMessage().getChatId();
         final Long userId = buttonQuery.getFrom().getId();
         BotState botState;
-        //відповідь на запит
-//        BotApiMethod<?> callBackAnswer = mainMenuService.getMainMenuMessage(chatId, "Please use main menu"); //відповідь за замовчуванням яка міститеме повідомлення з пропозицією скористатися меню і саме меню
-//        BotApiMethod<?> callBackAnswer = null;
 
+        //default callback answers
+        //this answer contain main menu, and propose to use it
+//        BotApiMethod<?> callBackAnswer = mainMenuService.getMainMenuMessage(chatId.toString(), replyMessageService.getReplyText("main_menu.use_main_menu"));
+        BotApiMethod<?> callBackAnswer;
         //Set bot state according to chose button.
 
         //From 'Continue' choose buttons.
@@ -109,7 +113,6 @@ public class TelegramFacade {
         //From 'Continue' button after video-button.
         else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue") + "\" has been pressed")
                 && userDataCache.getUsersCurrentBotState(userId).equals(BotState.VIDEOS_CONCLUSION)) {
-
             BotApiMethod<?> needsForSuccess = messageService.getReplyMessage(chatId, "greeting.steps_for_success");
 
             BotApiMethod<?> necessaryQualities = messageService.getReplyMessage(chatId, "greeting.dont_worry");
@@ -134,7 +137,6 @@ public class TelegramFacade {
 
         //From 'Get' consultation button.
         else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("consultation.get_button_text") + "\" has been pressed")) {
-
             BotApiMethod<?> intro = messageService.getReplyMessage(chatId, "consultation.intro");
             BotApiMethod<?> youWillGet = messageService.getReplyMessage(chatId, "consultation.you_will_get");
             BotApiMethod<?> youWillGet1 = messageService.getReplyMessage(chatId, "consultation.you_will_get_1");
@@ -160,7 +162,10 @@ public class TelegramFacade {
 
         userDataCache.setUsersCurrentBotState(userId, botState);
 
-        return botStateContext.handleCallbackQuery(botState, buttonQuery);
+//        if (botStateContext.handleCallbackQuery(botState, buttonQuery) != null)
+            callBackAnswer = botStateContext.handleCallbackQuery(botState, buttonQuery);
+
+        return callBackAnswer;
     }
 
     @SneakyThrows // Hide 'try-catch' processing in runtime.
@@ -174,6 +179,7 @@ public class TelegramFacade {
         // Set bot state according to entered message.
         switch (inputMessage) {
             case "/start":
+            case "Знакомство с ботом":
                 botState = BotState.WELCOME_NEW_CLIENT;
                 SendMessage greeting = replyMessageService.getReplyMessage(chatId, "greeting");
                 SendMessage aboutMe = replyMessageService.getReplyMessage(chatId, "greeting.about_me");
@@ -183,10 +189,20 @@ public class TelegramFacade {
                 telegramBot.sendSeveralAnswers(5, greeting, typing, aboutMe, typing);
                 break;
             case "/consultation_appointment":
+            case "Записаться на консультацию":
                 botState = BotState.ABOUT_CONSULTATION;
                 break;
             case "/help":
+            case "Помощь":
                 botState = BotState.SHOW_HELP_MENU;
+                break;
+            case "Новости":
+                botState = BotState.SHOW_NEWS_MENU;
+                break;
+            case "/unsibscribe":
+            case "/exit":
+            case "Отписаться от рассылки":
+                botState = BotState.SHOW_EXIT_MENU;
                 break;
             default:
                 // Take the bot state from the cache.
