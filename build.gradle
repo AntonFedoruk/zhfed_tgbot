@@ -31,6 +31,9 @@ dependencies {
     // this library transfer emoji -> into unicode objects
     implementation group: 'com.vdurmont', name: 'emoji-java', version: '5.1.1'
 
+    //DB
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.3.9.RELEASE'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.23'
 }
 
 test {
