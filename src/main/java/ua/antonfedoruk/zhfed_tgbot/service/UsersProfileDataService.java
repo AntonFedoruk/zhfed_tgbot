@@ -26,7 +26,7 @@ public class UsersProfileDataService {
         usersProfileDataRepository.deleteById(profileDataId);
     }
 
-    public UserProfileData getUserProfileData(String chatId) {
+    public UserProfileData getUserProfileData(Long chatId) {
         return usersProfileDataRepository.findByChatId(chatId);
     }
 }
