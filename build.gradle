@@ -34,6 +34,9 @@ dependencies {
     //DB
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.3.9.RELEASE'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.23'
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.3.10.RELEASE'
+
 }
 
 test {
