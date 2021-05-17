@@ -1,10 +1,8 @@
 package ua.antonfedoruk.zhfed_tgbot.model;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import ua.antonfedoruk.zhfed_tgbot.service.LocaleMessageService;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,12 +33,12 @@ public class UserProfileData implements Serializable {
 
     @Column(name = "phone_number", nullable = false)
     @NotBlank
-    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{9,10}$",
-    message = "Incorrect number format! Please, follow +************ pattern.")
+    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{9,10}$", message = "validation.exception_phone")
+//    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{9,10}$", message = "{validation.exception_phone}") it could be a part of LocalValidatorFactoryBean, but it cannot return text instead of '{validation.exception_phone}'
     String phoneNumber;
 
     @NotNull
-    @Size(min=2, max=30, message = "Country/city name should be represent at least of 2 symbols!")
+    @Size(min=2, max=30, message = "{validation.exception_country}")
     String country;
 
     @NotNull

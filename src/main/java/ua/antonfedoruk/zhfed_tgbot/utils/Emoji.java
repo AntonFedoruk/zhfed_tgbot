@@ -1,29 +1,32 @@
 package ua.antonfedoruk.zhfed_tgbot.utils;
 
 import com.vdurmont.emoji.EmojiParser;
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 public enum Emoji {
-    MONEY(EmojiParser.parseToUnicode(":dollar:")),
-    PC(EmojiParser.parseToUnicode(":desktop_computer:")),
-    CALLING(EmojiParser.parseToUnicode(":calling:")),
-    ARROW_DOWN(EmojiParser.parseToUnicode(":arrow_down:")),
-    PEN(EmojiParser.parseToUnicode(":lower_left_fountain_pen:")),
-    WINK(EmojiParser.parseToUnicode(":wink:")),
-    POINT_DOWN(EmojiParser.parseToUnicode(":point_down:")),
-    CLAP(EmojiParser.parseToUnicode(":clap:")),
-    LIKE(EmojiParser.parseToUnicode(":thumbsup:")),
-    NOTES(EmojiParser.parseToUnicode(":memo:")),
-    DOT(EmojiParser.parseToUnicode(":small_blue_diamond:")),
-    BLUSH(EmojiParser.parseToUnicode(":blush:")),
-    GIFT(EmojiParser.parseToUnicode(":gift:")),
-    BOOK(EmojiParser.parseToUnicode(":green_book:")),
-    WOMAN_TEACHER(EmojiParser.parseToUnicode(":woman_teacher:")),
-    SEND_LETTER(EmojiParser.parseToUnicode(":incoming_envelope:")),
-    INBOX_TRAY(EmojiParser.parseToUnicode(":inbox_tray:"));
+    MONEY(":dollar:"),
+    PC(":desktop_computer:"),
+    CALLING(":calling:"),
+    ARROW_DOWN(":arrow_down:"),
+    PEN(":lower_left_fountain_pen:"),
+    WINK(":wink:"),
+    POINT_DOWN(":point_down:"),
+    CLAP(":clap:"),
+    LIKE(":thumbsup:"),
+    NOTES(":memo:"),
+    DOT(":small_blue_diamond:"),
+    BLUSH(":blush:"),
+    GIFT(":gift:"),
+    BOOK(":green_book:"),
+    WOMAN_TEACHER(":woman_teacher:"),
+    SEND_LETTER(":incoming_envelope:"),
+    INBOX_TRAY(":inbox_tray:"),
+    WARNING(":warning:");
 
     private String name;
+
+    Emoji(String name) {
+        this.name = EmojiParser.parseToUnicode(name);
+    }
 
     @Override
     public String toString() {
