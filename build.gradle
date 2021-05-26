@@ -35,7 +35,16 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.3.9.RELEASE'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.23'
 
+    // validator
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.3.10.RELEASE'
+
+    // Jsoup is an open source Java library used mainly for extracting data from HTML
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+    // PhantomJSDriver is a Java binding for the PhantomJS WebDriver. We will use it for correct parsing of content that is added to the DOM by Javascript after the initial page load.
+//    implementation group: 'com.codeborne', name: 'phantomjsdriver', version: '1.4.4'
+    // Selenium automates browsers. We will use it for correct parsing of content that is added to the DOM by Javascript after the initial page load.
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
+
 
 }
 

@@ -77,10 +77,10 @@ public class TelegramFacade {
         //Set bot state according to chose button.
 
         //From 'Continue' choose buttons.
-        if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue") + "\" has been pressed")
+        if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue", Emoji.ARROW_DOWN) + "\" has been pressed")
                 && userDataCache.getUsersCurrentBotState(userId).equals(BotState.CONTINUE_BEFORE_ABOUT_SUCCESS)) {
             botState = BotState.CONTINUE_BEFORE_ABOUT_SUCCESS;
-
+            System.out.println("In telegramFacade handleCallbackQuery's if(From 'Continue' choose buttons) statement ");
             telegramBot.sendPhoto(chatId, null, "static/images/contracts-and-agreements.jpg");
 
             SendMessage aboutSuccess = replyMessageService.getReplyMessage(chatId, "greeting.about_success", Emoji.PEN);
@@ -111,7 +111,7 @@ public class TelegramFacade {
         }
 
         //From 'Continue' button after video-button.
-        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue") + "\" has been pressed")
+        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("continue", Emoji.ARROW_DOWN) + "\" has been pressed")
                 && userDataCache.getUsersCurrentBotState(userId).equals(BotState.VIDEOS_CONCLUSION)) {
             BotApiMethod<?> needsForSuccess = messageService.getReplyMessage(chatId, "greeting.steps_for_success", Emoji.NOTES, Emoji.DOT);
 
@@ -136,7 +136,7 @@ public class TelegramFacade {
 //        }
 
         //From 'Get' consultation button.
-        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("consultation.get_button_text") + "\" has been pressed")) {
+        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("consultation.get_button_text", Emoji.GIFT) + "\" has been pressed")) {
             BotApiMethod<?> intro = messageService.getReplyMessage(chatId, "consultation.intro");
             BotApiMethod<?> youWillGet = messageService.getReplyMessage(chatId, "consultation.you_will_get", Emoji.BOOK);
             BotApiMethod<?> youWillGet1 = messageService.getReplyMessage(chatId, "consultation.you_will_get_1");
@@ -152,9 +152,8 @@ public class TelegramFacade {
                     typing, youWillGet2, typing, youWillGet3, typing, youWillGet4, typing);
 
             botState = BotState.ABOUT_CONSULTATION;
-        }
-
-        else {// Take the bot state from the cache.
+        } else {// Take the bot state from the cache.
+            log.info("telegramFacade > handleCallbackQuery() > else block (Unpredictable statement! -> Take the bot state from the cache!)");
             botState = userDataCache.getUsersCurrentBotState(userId);
         }
 
@@ -163,7 +162,7 @@ public class TelegramFacade {
         userDataCache.setUsersCurrentBotState(userId, botState);
 
 //        if (botStateContext.handleCallbackQuery(botState, buttonQuery) != null)
-            callBackAnswer = botStateContext.handleCallbackQuery(botState, buttonQuery);
+        callBackAnswer = botStateContext.handleCallbackQuery(botState, buttonQuery);
 
         return callBackAnswer;
     }
@@ -177,37 +176,24 @@ public class TelegramFacade {
         SendMessage replyMessage;
 
         // Set bot state according to entered message.
-        switch (inputMessage) {
-            case "/start":
-            case "Знакомство с ботом":
-                botState = BotState.WELCOME_NEW_CLIENT;
-                SendMessage greeting = replyMessageService.getReplyMessage(chatId, "greeting");
-                SendMessage aboutMe = replyMessageService.getReplyMessage(chatId, "greeting.about_me", Emoji.MONEY);
-                SendChatAction typing = new SendChatAction();
-                typing.setAction(ActionType.TYPING);
-                typing.setChatId(chatId.toString());
-                telegramBot.sendSeveralAnswers(5, greeting, typing, aboutMe, typing);
-                break;
-            case "/consultation_appointment":
-            case "Записаться на консультацию":
-                botState = BotState.ABOUT_CONSULTATION;
-                break;
-            case "/help":
-            case "Помощь":
-                botState = BotState.SHOW_HELP_MENU;
-                break;
-            case "Новости":
-                botState = BotState.SHOW_NEWS_MENU;
-                break;
-            case "/unsibscribe":
-            case "/exit":
-            case "Отписаться от рассылки":
-                botState = BotState.SHOW_EXIT_MENU;
-                break;
-            default:
-                // Take the bot state from the cache.
-                botState = userDataCache.getUsersCurrentBotState(userId);
-                break;
+        if ("/start".equals(inputMessage) || "Знакомство с ботом".equals(inputMessage)) {
+            botState = BotState.WELCOME_NEW_CLIENT;
+            SendMessage greeting = replyMessageService.getReplyMessage(chatId, "greeting");
+            SendMessage aboutMe = replyMessageService.getReplyMessage(chatId, "greeting.about_me", Emoji.MONEY);
+            SendChatAction typing = new SendChatAction();
+            typing.setAction(ActionType.TYPING);
+            typing.setChatId(chatId.toString());
+            telegramBot.sendSeveralAnswers(5, greeting, typing, aboutMe, typing);
+        } else if ("/consultation_appointment".equals(inputMessage) || "Записаться на консультацию".equals(inputMessage)) {
+            botState = BotState.ABOUT_CONSULTATION;
+        } else if ("/help".equals(inputMessage) || "Помощь".equals(inputMessage)) {
+            botState = BotState.SHOW_HELP_MENU;
+        } else if ("Новости".equals(inputMessage)) {
+            botState = BotState.SHOW_NEWS_MENU;
+        } else if ("/unsibscribe".equals(inputMessage) || "/exit".equals(inputMessage) || "Отписаться от рассылки".equals(inputMessage)) {
+            botState = BotState.SHOW_EXIT_MENU;
+        } else {// Take the bot state from the cache.
+            botState = userDataCache.getUsersCurrentBotState(userId);
         }
 
         userDataCache.setUsersCurrentBotState(userId, botState);
