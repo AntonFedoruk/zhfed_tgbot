@@ -38,7 +38,7 @@ public class UserProfileData implements Serializable {
     String phoneNumber;
 
     @NotNull
-    @Size(min=2, max=30, message = "{validation.exception_country}")
+    @Size(min=2, max=30, message = "validation.exception_country")
     String country;
 
     @NotNull
