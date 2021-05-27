@@ -2,7 +2,6 @@ package ua.antonfedoruk.zhfed_tgbot.config;
 
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,11 +10,6 @@ import javax.annotation.PreDestroy;
 
 @Configuration
 public class SeleniumConfiguration {
-    private final String locale;
-
-    public SeleniumConfiguration(@Value("${localeTag}") String locale) {
-        this.locale = locale;
-    }
 
     @PostConstruct
     void init() {
