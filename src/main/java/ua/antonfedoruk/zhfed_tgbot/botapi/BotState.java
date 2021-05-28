@@ -17,5 +17,6 @@ public enum BotState {
     SHOW_HELP_MENU,
     SHOW_MAIN_MENU,
     SHOW_EXIT_MENU,
-    SHOW_NEWS_MENU
+    SHOW_NEWS_MENU,
+    SHOW_MORE_NEWS_BUTTON
 }

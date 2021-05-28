@@ -152,7 +152,15 @@ public class TelegramFacade {
                     typing, youWillGet2, typing, youWillGet3, typing, youWillGet4, typing);
 
             botState = BotState.ABOUT_CONSULTATION;
-        } else {// Take the bot state from the cache.
+        }
+
+        //From 'Show more news' button.
+        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("news.button_show_more") + "\" has been pressed")){
+            botState = BotState.SHOW_MORE_NEWS_BUTTON;
+        }
+
+
+        else{// Take the bot state from the cache.
             log.info("telegramFacade > handleCallbackQuery() > else block (Unpredictable statement! -> Take the bot state from the cache!)");
             botState = userDataCache.getUsersCurrentBotState(userId);
         }

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-//In-memory cache
+// In-memory cache
 // Defines which news should be send to user
 @Component
 @Slf4j
@@ -26,7 +26,7 @@ public class NewsDataCache implements NewsCache {
     }
 
     @Override
-    public ScraperService.News getNewsPostForUserWithChatId(String usersChatId) {
+    public ScraperService.News getNewsPostForUserWithChatId(String usersChatId) throws NullPointerException {
         if (shownToUser.containsKey(usersChatId)) {
             log.info("(" + usersChatId + ") This user have obtained news previously!");
             String lastHeadline = shownToUser.get(usersChatId);
@@ -46,6 +46,10 @@ public class NewsDataCache implements NewsCache {
             });
 
             shownToUser.put(usersChatId, nextHeadline[0]);
+
+            if (res[0] == null) {
+                throw new NullPointerException("No more news:(");
+            }
 
             return res[0];
         } else {

@@ -34,24 +34,38 @@ public class NewsMenuHandler implements InputMessageHandler {
 
     @Override
     public SendMessage handle(Message message) {
-        String chatId = String.valueOf(message.getFrom().getId());
+        String chatId = String.valueOf(message.getChatId());
 
-        ScraperService.News newsData = newsDataCache.getNewsPostForUserWithChatId(chatId);
 
-        if (newsData == null) {
+        SendMessage replyMessage = new SendMessage(chatId, "");
+
+        ScraperService.News newsData;
+        try {
+            newsData = newsDataCache.getNewsPostForUserWithChatId(chatId);
+        } catch (NullPointerException e) {
             telegramBot.sendPhoto(Long.parseLong(chatId), "Это все новости на сегодня!", "static/images/no_news.png");
-        } else {
-            String headlineWithLinkInside = "<a href=\"" + newsData.getLink() + "\">" + newsData.getHeadline() + "</a>";
-            String text = newsData.getText();
 
-            telegramBot.sendPhoto(message.getFrom().getId(),
-                    headlineWithLinkInside + "\n" + text,
-                    newsData.getImageLink(),
-                    ParseMode.HTML);
+            return replyMessage;
         }
 
-        SendMessage replyMessage = new SendMessage();
-        replyMessage.setChatId(chatId);
+//        if (newsData == null) {
+//            telegramBot.sendPhoto(Long.parseLong(chatId), "Это все новости на сегодня!", "static/images/no_news.png");
+//        } else {
+        String headlineWithLinkInside = "<a href=\"" + newsData.getLink() + "\">" + newsData.getHeadline() + "</a>";
+        String text = newsData.getText();
+
+        telegramBot.sendPhoto(message.getFrom().getId(),
+                headlineWithLinkInside + "\n" + text,
+                newsData.getImageLink(),
+                ParseMode.HTML,
+                buttonService.createButton(replyMessageService.getReplyText("news.button_show_more")));
+//        }
+
+//        SendMessage replyMessage = new SendMessage();
+//        replyMessage.setChatId(chatId);
+//        replyMessage.setText("&#8205");
+//        replyMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("news.button_show_more")));
+//        replyMessage.setParseMode(ParseMode.HTML);
         return replyMessage;
 
 //        SendMessage replyMessage = new SendMessage();
@@ -60,7 +74,7 @@ public class NewsMenuHandler implements InputMessageHandler {
 //        replyMessage.enableWebPagePreview();
 //        String photo = "<a href=\"" + newsData.getImageLink() + "\">&#8205;</a>"; //&#8205; -> never show in message
 
-//        replyMessage.setText(photo); //&#8205; -> never show in message
+//        replyMessage.setText(photo);
 //
 ////        SendMessage replyMessage = replyMessageService.getReplyMessage(message.getFrom().getId(), "consultation.registration_instructions", Emoji.WOMAN_TEACHER, Emoji.WINK);
 //        replyMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("consultation.registration_button", Emoji.SEND_LETTER)));

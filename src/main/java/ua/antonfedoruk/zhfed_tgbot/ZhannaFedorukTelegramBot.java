@@ -10,6 +10,8 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import ua.antonfedoruk.zhfed_tgbot.botapi.TelegramFacade;
 
 import java.io.*;
@@ -143,6 +145,27 @@ public class ZhannaFedorukTelegramBot extends TelegramWebhookBot {
         sendPhoto.setParseMode(parseMode);
         execute(sendPhoto);
     }
+
+    @SneakyThrows
+    public void sendPhoto(long chatId, String imageCaption, String imageLink, String parseMode, ReplyKeyboard replyMarkup) {
+        URI u = URI.create(imageLink);
+        File file = null;
+        try (InputStream inputStream = u.toURL().openStream();){
+            file = copyInputStreamToTempFile(inputStream);
+            //TODO
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        SendPhoto sendPhoto = new SendPhoto();
+        sendPhoto.setPhoto(new InputFile(file));
+        sendPhoto.setChatId(Long.toString(chatId));
+        sendPhoto.setCaption(imageCaption);
+        sendPhoto.setParseMode(parseMode);
+        sendPhoto.setReplyMarkup(replyMarkup);
+        execute(sendPhoto);
+    }
+
 
     private File copyInputStreamToTempFile(InputStream input) {
         Path path = null;
