@@ -8,6 +8,7 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -92,14 +93,7 @@ public class ZhannaFedorukTelegramBot extends TelegramWebhookBot {
 
     @SneakyThrows
     public void sendPhoto(long chatId, String imageCaption, String imageLink, String parseMode) {
-        URI u = URI.create(imageLink);
-        File file = null;
-        try (InputStream inputStream = u.toURL().openStream();){
-            file = copyInputStreamToTempFile(inputStream);
-            //TODO
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        File file = getFileFromLink(imageLink);
 
 //        URI u = URI.create(imageLink);
 //        final Path path = Files.createTempFile("tempImg_" + UUID.randomUUID().toString(), ".jpg");
@@ -148,14 +142,7 @@ public class ZhannaFedorukTelegramBot extends TelegramWebhookBot {
 
     @SneakyThrows
     public void sendPhoto(long chatId, String imageCaption, String imageLink, String parseMode, ReplyKeyboard replyMarkup) {
-        URI u = URI.create(imageLink);
-        File file = null;
-        try (InputStream inputStream = u.toURL().openStream();){
-            file = copyInputStreamToTempFile(inputStream);
-            //TODO
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        File file = getFileFromLink(imageLink);
 
         SendPhoto sendPhoto = new SendPhoto();
         sendPhoto.setPhoto(new InputFile(file));
@@ -164,6 +151,18 @@ public class ZhannaFedorukTelegramBot extends TelegramWebhookBot {
         sendPhoto.setParseMode(parseMode);
         sendPhoto.setReplyMarkup(replyMarkup);
         execute(sendPhoto);
+    }
+
+    public File getFileFromLink(String imageLink) {
+        URI u = URI.create(imageLink);
+        File file = null;
+        try (InputStream inputStream = u.toURL().openStream();) {
+            file = copyInputStreamToTempFile(inputStream);
+            //TODO
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 
 
@@ -185,6 +184,11 @@ public class ZhannaFedorukTelegramBot extends TelegramWebhookBot {
         image.deleteOnExit();
 
         return image;
+    }
+
+    @SneakyThrows
+    public void updateMessageMedia(EditMessageMedia editMessageMedia) {
+        execute(editMessageMedia);
     }
 
     private File getFile(InputStream resourceAsStream) {

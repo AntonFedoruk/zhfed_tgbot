@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import ua.antonfedoruk.zhfed_tgbot.ZhannaFedorukTelegramBot;
 import ua.antonfedoruk.zhfed_tgbot.botapi.BotState;
 import ua.antonfedoruk.zhfed_tgbot.cache.NewsDataCache;
@@ -29,15 +31,15 @@ public class ShowMoreNewsQueryHandler implements CallbackQueryHandler {
 
     @Override
     public BotApiMethod<?> handle(CallbackQuery buttonQuery) {
-//        EditMessageMedia editMessageMedia;
         Long chatId = buttonQuery.getMessage().getChatId();
+        Integer messageId = buttonQuery.getMessage().getMessageId();
 
         //заглушка
         SendMessage replyMessage = new SendMessage();
         replyMessage.setChatId(String.valueOf(chatId));
         replyMessage.setText("");
 
-        ScraperService.News newsData = null;
+        ScraperService.News newsData;
         try {
             newsData = newsDataCache.getNewsPostForUserWithChatId(String.valueOf(chatId));
         } catch (NullPointerException e) {
@@ -46,18 +48,21 @@ public class ShowMoreNewsQueryHandler implements CallbackQueryHandler {
             return replyMessage;
         }
 
-//        if (newsData == null) {
-//            telegramBot.sendPhoto(Long.parseLong(chatId), "Это все новости на сегодня!", "static/images/no_news.png");
-//        } else {
         String headlineWithLinkInside = "<a href=\"" + newsData.getLink() + "\">" + newsData.getHeadline() + "</a>";
         String text = newsData.getText();
 
-        telegramBot.sendPhoto(chatId,
-                headlineWithLinkInside + "\n" + text,
-                newsData.getImageLink(),
-                ParseMode.HTML,
-                buttonService.createButton(replyMessageService.getReplyText("news.button_show_more")));
-//        }
+        EditMessageMedia editMessage = new EditMessageMedia();
+        editMessage.setChatId(String.valueOf(chatId));
+        editMessage.setMessageId(messageId);
+        InputMediaPhoto mediaPhoto = new InputMediaPhoto();
+        mediaPhoto.setMedia(telegramBot.getFileFromLink(newsData.getImageLink()), telegramBot.getFileFromLink(newsData.getImageLink()).getName());
+        mediaPhoto.setCaption(headlineWithLinkInside + "\n" + text);
+        mediaPhoto.setParseMode(ParseMode.HTML);
+        editMessage.setMedia(mediaPhoto);
+        editMessage.setReplyMarkup(buttonService.createButton(replyMessageService.getReplyText("news.button_show_more")));
+
+        telegramBot.updateMessageMedia(editMessage);
+
         return replyMessage;
     }
 
