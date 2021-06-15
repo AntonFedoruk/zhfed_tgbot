@@ -1,6 +1,7 @@
 package ua.antonfedoruk.zhfed_tgbot.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import ua.antonfedoruk.zhfed_tgbot.model.Language;
 import ua.antonfedoruk.zhfed_tgbot.model.UserProfileData;
 
 // This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository

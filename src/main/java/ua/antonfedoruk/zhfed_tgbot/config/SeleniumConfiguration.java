@@ -13,7 +13,7 @@ public class SeleniumConfiguration {
 
     @PostConstruct
     void init() {
-        System.setProperty("webdriver.chrome.driver", "/home/anton/chromedrivers/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "/home/anton/chromedrivers/chromedriver_91_linux64/chromedriver");
     }
 
     @PreDestroy

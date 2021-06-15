@@ -4,10 +4,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -24,7 +21,7 @@ public class UserProfileData implements Serializable {
     @Column(name = "chat_id")
     Long chatId;
 
-//    @Pattern(message = "Bad formed person name: ${validatedValue}",
+    //    @Pattern(message = "Bad formed person name: ${validatedValue}",
 //            regexp = "^[A-Z][a-z]*(\\s(([a-z]{1,3})|(([a-z]+\\')?[A-Z][a-z]*)))*$")
 //    @Length(min = 2)
 //    @NotNull
@@ -35,12 +32,15 @@ public class UserProfileData implements Serializable {
     @NotBlank
     @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{9,10}$", message = "validation.exception_phone")
 //    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{9,10}$", message = "{validation.exception_phone}") it could be a part of LocalValidatorFactoryBean, but it cannot return text instead of '{validation.exception_phone}'
-    String phoneNumber;
+            String phoneNumber;
 
     @NotNull
-    @Size(min=2, max=30, message = "validation.exception_country")
+    @Size(min = 2, max = 30, message = "validation.exception_country")
     String country;
 
     @NotNull
     String messenger;
+
+    @Enumerated(EnumType.STRING)
+    Language language = Language.ENGLISH;
 }
