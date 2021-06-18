@@ -16,4 +16,8 @@ public enum Language {
     public String getLanguageTag() {
         return languageTag;
     }
+
+    public String getLanguageTag2Letters() {
+        return getLanguageTag().substring(0, 2);
+    }
 }

@@ -53,7 +53,7 @@ public class ScraperService {
     }
 
     //get bunch of news from site
-    public List<News> getNews() {
+    public List<News> getNewsWithSpecificLanguage(String lang) { // lang: "ru" / "uk" / "en"
         //      Browser navigation
         // Open your website:
         // convenient way
@@ -65,7 +65,7 @@ public class ScraperService {
 
         //WebElement represents a particular DOM node (a control, e.g. a link or input field, etc.)
 //        WebElement language = driver.findElement(By.name("language"));
-        WebElement language = driver.findElementByCssSelector("#selectForm > option[value='ru']");
+        WebElement language = driver.findElementByCssSelector("#selectForm > option[value='" + lang + "']");
         language.click();
 //        Select drpLanguage = new Select(driver.findElementByName("language"));
 //        drpLanguage.selectByValue("ru");
