@@ -184,7 +184,7 @@ public class TelegramFacade {
         SendMessage replyMessage;
 
         // Set bot state according to entered message.
-        if ("/start".equals(inputMessage) || "Знакомство с ботом".equals(inputMessage)) {
+        if ("/start".equals(inputMessage) || messageService.getReplyText("main_menu.button_hello").equals(inputMessage)) {
             botState = BotState.WELCOME_NEW_CLIENT;
             SendMessage greeting = replyMessageService.getReplyMessage(chatId, "greeting");
             SendMessage aboutMe = replyMessageService.getReplyMessage(chatId, "greeting.about_me", Emoji.MONEY);
@@ -192,13 +192,13 @@ public class TelegramFacade {
             typing.setAction(ActionType.TYPING);
             typing.setChatId(chatId.toString());
             telegramBot.sendSeveralAnswers(5, greeting, typing, aboutMe, typing);
-        } else if ("/consultation_appointment".equals(inputMessage) || "Записаться на консультацию".equals(inputMessage)) {
+        } else if ("/consultation_appointment".equals(inputMessage) || messageService.getReplyText("main_menu.button_consultation").equals(inputMessage)) {
             botState = BotState.ABOUT_CONSULTATION;
-        } else if ("/help".equals(inputMessage) || "Помощь".equals(inputMessage)) {
+        } else if ("/help".equals(inputMessage) || messageService.getReplyText("main_menu.button_help").equals(inputMessage)) {
             botState = BotState.SHOW_HELP_MENU;
-        } else if ("Новости".equals(inputMessage)) {
+        } else if (messageService.getReplyText("main_menu.button_news").equals(inputMessage)) {
             botState = BotState.SHOW_NEWS_MENU;
-        } else if ("/unsibscribe".equals(inputMessage) || "/exit".equals(inputMessage) || "Отписаться от рассылки".equals(inputMessage)) {
+        } else if ("/unsibscribe".equals(inputMessage) || messageService.getReplyText("main_menu.button_exit").equals(inputMessage)) {
             botState = BotState.SHOW_EXIT_MENU;
         } else {// Take the bot state from the cache.
             botState = userDataCache.getUsersCurrentBotState(userId);

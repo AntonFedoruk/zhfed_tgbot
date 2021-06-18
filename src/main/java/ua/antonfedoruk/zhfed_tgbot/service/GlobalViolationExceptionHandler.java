@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice //@RestControllerAdvice = @ControllerAdvice + @ResponseBody
 public class GlobalViolationExceptionHandler implements HandlerInterceptor, RequestBodyAdvice { //implements RequestBodyAdvice = возможность получить содержимое тела запроса
 //При спробі просто отримати тіло запиту з HttpServletRequest/WebRequest і т.д. виникають проблеми як тут(https://coderoad.ru/43502332/%D0%9A%D0%B0%D0%BA-%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C-RequestBody-%D0%B2-ExceptionHandler-Spring-REST)
-//... тому городим такий огород з зберіганням данних запиту використовуючиHandlerInterceptor, RequestBodyAdvice
+//... тому городим такий огород з зберіганням данних запиту використовуючи HandlerInterceptor, RequestBodyAdvice
 
     //Используем перехватчик(HandlerInterceptor), что бы получить другую информацию о запросе, такую как метод HTTP и параметры запроса.
     //Зафиксируем всю эту информацию запроса для сообщения об ошибках в переменной ThreadLocal, которую будем очищать на крючке afterCompletion в том же перехватчике.

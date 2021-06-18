@@ -51,7 +51,7 @@ public class BotConfig {
     // ReloadableResourceBundleMessageSource is the most common MessageSource implementation that resolves messages from resource bundles for different locales:
     @Bean
     public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource(); //We can consider using another implementation which is ReloadableResourceBundleMessageSource if our localized messages will be changed at runtime.
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         //Here, it's important to provide the basename as locale-specific file names will be resolved based on the name provided.
         messageSource.setBasename("classpath:messages");
         messageSource.setDefaultEncoding("UTF-8");
