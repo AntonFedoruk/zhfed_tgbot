@@ -42,5 +42,5 @@ public class UserProfileData implements Serializable {
     String messenger;
 
     @Enumerated(EnumType.STRING)
-    Language language = Language.ENGLISH;
+    Language language = Language.RUSSIA; //ru as default value
 }
