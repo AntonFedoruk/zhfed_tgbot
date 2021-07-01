@@ -155,12 +155,9 @@ public class TelegramFacade {
         }
 
         //From 'Show more news' button.
-        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("news.button_show_more") + "\" has been pressed")){
+        else if (buttonQuery.getData().equals("Button \"" + messageService.getReplyText("news.button_show_more") + "\" has been pressed")) {
             botState = BotState.SHOW_MORE_NEWS_BUTTON;
-        }
-
-
-        else{// Take the bot state from the cache.
+        } else {// Take the bot state from the cache.
             log.info("telegramFacade > handleCallbackQuery() > else block (Unpredictable statement! -> Take the bot state from the cache!)");
             botState = userDataCache.getUsersCurrentBotState(userId);
         }
@@ -200,6 +197,8 @@ public class TelegramFacade {
             botState = BotState.SHOW_NEWS_MENU;
         } else if ("/unsibscribe".equals(inputMessage) || messageService.getReplyText("main_menu.button_exit").equals(inputMessage)) {
             botState = BotState.SHOW_EXIT_MENU;
+        } else if ("/language".equals(inputMessage) || messageService.getReplyText("main_menu.button_language", Emoji.GLOBE).equals(inputMessage)) {
+            botState = BotState.SHOW_LANGUAGE_MENU;
         } else {// Take the bot state from the cache.
             botState = userDataCache.getUsersCurrentBotState(userId);
         }

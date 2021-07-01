@@ -102,4 +102,39 @@ public class CreateButtonService {
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;
     }
+
+    public InlineKeyboardMarkup createButtons3psInRow(String buttonText11, String buttonText12, String buttonText13) {
+        //Создаем обьект разметки клавиатуры:
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+        //Теперь выстраиваем положение кнопок.
+
+        //Создаем обьекты InlineKeyboardButton, у которых есть 2 параметра:
+        //Текст (Что будет написано на самой кнопке) и CallBackData (Что будет отсылатся серверу при нажатии на кнопку).
+        InlineKeyboardButton button11 = new InlineKeyboardButton();
+        button11.setText(buttonText11);
+        button11.setCallbackData("Button \"" + buttonText11 + "\" has been pressed");
+
+        InlineKeyboardButton button12 = new InlineKeyboardButton();
+        button12.setText(buttonText12);
+        button12.setCallbackData("Button \"" + buttonText12 + "\" has been pressed");
+
+        InlineKeyboardButton button13 = new InlineKeyboardButton();
+        button13.setText(buttonText13);
+        button13.setCallbackData("Button \"" + buttonText13 + "\" has been pressed");
+
+        //Добавляем его в список, таким образом создавая ряд.
+        List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
+        keyboardButtonsRow1.add(button11);
+        keyboardButtonsRow1.add(button12);
+        keyboardButtonsRow1.add(button13);
+
+        //После этого нам нужно 'обьеденить ряды'(если у нас их несколько), поэтому создаем список рядов.
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardButtonsRow1);
+
+        //Теперь мы можем установить кнопку в обьект разметки клавиатуры.
+        inlineKeyboardMarkup.setKeyboard(rowList);
+        return inlineKeyboardMarkup;
+    }
 }

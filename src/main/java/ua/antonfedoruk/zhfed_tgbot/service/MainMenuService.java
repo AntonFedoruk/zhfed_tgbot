@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import ua.antonfedoruk.zhfed_tgbot.utils.Emoji;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ public class MainMenuService {
         row3.add(new KeyboardButton(localeMessageService.getMessage("main_menu.button_news")));
         row3.add(new KeyboardButton(localeMessageService.getMessage("main_menu.button_help")));
         row4.add(new KeyboardButton(localeMessageService.getMessage("main_menu.button_exit")));
+        row4.add(new KeyboardButton(localeMessageService.getMessage("main_menu.button_language", Emoji.GLOBE)));
         keyboardRows.add(row1);
         keyboardRows.add(row2);
         keyboardRows.add(row3);

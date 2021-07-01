@@ -20,7 +20,11 @@ public enum Emoji {
     WOMAN_TEACHER(":woman_teacher:"),
     SEND_LETTER(":incoming_envelope:"),
     INBOX_TRAY(":inbox_tray:"),
-    WARNING(":warning:");
+    WARNING(":warning:"),
+    FLAG_UA(":ua:"),
+    FLAG_EN(":us:"),
+    FLAG_RU(":ru:"),
+    GLOBE(":globe_with_meridians:");
 
     private String name;
 

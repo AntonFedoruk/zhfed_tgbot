@@ -1,7 +1,5 @@
 package ua.antonfedoruk.zhfed_tgbot.model;
 
-import lombok.Setter;
-
 public enum Language {
     ENGLISH("en-En"),
     RUSSIA("ru-RU"),

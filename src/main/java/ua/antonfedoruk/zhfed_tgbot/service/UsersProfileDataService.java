@@ -8,7 +8,6 @@ import ua.antonfedoruk.zhfed_tgbot.repository.UsersProfileDataRepository;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 @Validated
@@ -30,6 +29,12 @@ public class UsersProfileDataService {
 
     public Language getUserLanguage(Long chatId) {
         return usersProfileDataRepository.findByChatId(chatId).getLanguage();
+    }
+
+    public void setUserLanguage(Long chatId, Language language) {
+        UserProfileData userProfileData = getUserProfileData(chatId);
+        userProfileData.setLanguage(language);
+        saveUsersProfileData(userProfileData);
     }
 
     public void deleteUsersProfileData(String profileDataId) {
