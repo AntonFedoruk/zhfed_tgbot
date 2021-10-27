@@ -16,16 +16,14 @@ import java.util.Map;
 @Slf4j
 public class NewsDataCache implements NewsCache {
     // key: user chat id,   value: the last shown news headline
-    private Map<String, String> shownToUser = new HashMap<>();
+    private Map<String, String> usersWithLastShownNewsHeadline = new HashMap<>();
     // key: headline,   value: news
 //    private Map<String, ScraperService.News> newsCache = new LinkedHashMap<>();
 
-
-    // key: language,  value Map<headline, news>
-    private Map<String, Map<String, ScraperService.News>> allNewsCache = new HashMap<>();
+    // key: language,  value: Map<headline, news>
+    private Map<String, Map<String, ScraperService.News>> newsCacheForAllLanguages = new LinkedHashMap<>();
 
     private final UsersProfileDataService usersProfileDataService;
-
 
     private ScraperService scraperService;
 
@@ -40,37 +38,48 @@ public class NewsDataCache implements NewsCache {
         Language userLanguage = usersProfileDataService.getUserLanguage(Long.parseLong(usersChatId));
         String userlanguageTag = userLanguage.getLanguageTag2Letters();
 
-        if (shownToUser.containsKey(usersChatId)) {
-            log.info("(" + usersChatId + ") This user have obtained news previously!");
-            String lastHeadline = shownToUser.get(usersChatId);
+        if (usersWithLastShownNewsHeadline.containsKey(usersChatId)) {
+            String lastShownNewsHeadline = usersWithLastShownNewsHeadline.get(usersChatId);
+            log.info("(" + usersChatId + ") This user obtained news previously.");
 
-            final String[] nextHeadline = new String[1];
-            final boolean[] isNext = {false};
-            final ScraperService.News[] res = new ScraperService.News[1];
+            String[] nextHeadline = new String[1];
+            boolean[] takeNextOne = {false};
+            ScraperService.News[] resultingNews = new ScraperService.News[1];
 
 //            newsCache.forEach((headline, news) -> {
-            allNewsCache.get(userlanguageTag).forEach((headline, news) -> {
-                if (headline.equals(lastHeadline)) {
-                    isNext[0] = true;
-                } else if (isNext[0]) {
-                    nextHeadline[0] = headline;
-                    res[0] = news;
-                    isNext[0] = false;
+            newsCacheForAllLanguages.get(userlanguageTag).forEach((newsHeadline, news) -> {
+                if (takeNextOne[0]) {
+                    nextHeadline[0] = newsHeadline;
+                    resultingNews[0] = news;
+                    takeNextOne[0] = false;
+                } else if (newsHeadline.equals(lastShownNewsHeadline)) {
+                    takeNextOne[0] = true;
                 }
             });
 
-            shownToUser.put(usersChatId, nextHeadline[0]);
+            usersWithLastShownNewsHeadline.put(usersChatId, nextHeadline[0]);
 
-            if (res[0] == null) {
+            if (takeNextOne[0]) {
                 throw new NullPointerException("No more news:(");
             }
 
-            return res[0];
+            if (resultingNews[0] == null) {
+
+                log.info("(" + usersChatId + ") it seems like user have changed lang; show all news with correct lang from start");
+                Map.Entry<String, ScraperService.News> firstNews = newsCacheForAllLanguages.get(userlanguageTag).entrySet().iterator().next();
+                usersWithLastShownNewsHeadline.put(usersChatId, firstNews.getKey());
+
+                return firstNews.getValue();
+            }
+
+            log.info("User" + "(" + usersChatId + ")" + " should obtain news with header: " + nextHeadline);
+
+            return resultingNews[0];
         } else {
             log.info("(" + usersChatId + ") First attempt to obtained news");
 //            Map.Entry<String, ScraperService.News> firstNews = newsCache.entrySet().iterator().next();
-            Map.Entry<String, ScraperService.News> firstNews = allNewsCache.get(userlanguageTag).entrySet().iterator().next();
-            shownToUser.put(usersChatId, firstNews.getKey());
+            Map.Entry<String, ScraperService.News> firstNews = newsCacheForAllLanguages.get(userlanguageTag).entrySet().iterator().next();
+            usersWithLastShownNewsHeadline.put(usersChatId, firstNews.getKey());
 
             return firstNews.getValue();
         }
@@ -83,19 +92,31 @@ public class NewsDataCache implements NewsCache {
         scraperService.getNewsWithSpecificLanguage("uk").forEach(news -> saveNews(news, "uk"));
         scraperService.getNewsWithSpecificLanguage("en").forEach(news -> saveNews(news, "en"));
         log.info("News loading completed!");
+
+//        System.out.println("News hash: \n*********");
+//        newsCacheForAllLanguages.entrySet().forEach(
+//                entry -> entry.getValue().forEach(
+//                        (header, news) -> System.out.println(header)
+//                )
+//        );
+//        System.out.println("*********");
     }
 
     private void saveNews(ScraperService.News news, String lang) {
 //        if (!newsCache.containsKey(news.getHeadline())) {
 //            newsCache.put(news.getHeadline(), news);
 //        }
-        if (!allNewsCache.containsKey(lang)) {
+        if (lang.equals("uk")) {
+            lang = "ua";
+        }
+
+        if (!newsCacheForAllLanguages.containsKey(lang)) {
             LinkedHashMap<String, ScraperService.News> linkedHashMap = new LinkedHashMap<>();
             linkedHashMap.put(news.getHeadline(), news);
-            allNewsCache.put(lang, linkedHashMap);
+            newsCacheForAllLanguages.put(lang, linkedHashMap);
 
         } else {
-            Map<String, ScraperService.News> map = allNewsCache.get(lang);
+            Map<String, ScraperService.News> map = newsCacheForAllLanguages.get(lang);
             if (!map.containsKey(news.getHeadline())) {
                 map.put(news.getHeadline(), news);
             }
